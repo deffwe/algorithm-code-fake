@@ -17,35 +17,58 @@ public:
         	return false;
         }
 
-        if(sum == root->val) {
-        	return true;
+        if(root->left == NULL && root->right == NULL) {
+            return (root->val == sum);
         }
-        hasPathSum(root->left, sum - root->val);
-        hasPathSum(root->right, sum - root->val);
+        
+        if(root->left != NULL) {
+            root->left->val += root->val;
+            if(hasPathSum(root->left, sum)) {
+                return true;
+            }
+        }
+        if(root->right != NULL) {
+            root->right->val += root->val;
+            if(hasPathSum(root->right, sum)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    void printTree(TreeNode* root) {
+        if(root == NULL) {
+            return;
+        }
+        cout << root->val << " ";
+        printTree(root->left);
+        printTree(root->right);
     }
 };
 
 int main(int argc, char** argv) {
-	int sum = 10;
+	int sum = 22;
 	if(argc > 1) {
 		sum = atoi(argv[1]);
 	}
 	Solution s;
 
-	TreeNode node = new TreeNode(5);
-	node.left = new TreeNode(4);
-	node.right = new TreeNode(8);
+	TreeNode *node = new TreeNode(5);
+	node->left = new TreeNode(4);
+	node->right = new TreeNode(8);
 
-	node.left.left = new TreeNode(11);
+	node->left->left = new TreeNode(11);
 
-	node.right.left = new TreeNode(13);
-	node.right.right = new TreeNode(4);
+	node->right->left = new TreeNode(13);
+	node->right->right = new TreeNode(4);
 
-	node.left.left.left = new TreeNode(7);
-	node.left.left.right = new TreeNode(2);
+	node->left->left->left = new TreeNode(7);
+	node->left->left->right = new TreeNode(2);
 
-	node.right.right.right = new TreeNode(1);
+	node->right->right->right = new TreeNode(1);
 
-	cout << s.hasPathSum(node, 22) << endl;
+    s.printTree(node);
+	cout << s.hasPathSum(node, sum) << endl;
 	return 0;
 }
